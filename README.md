@@ -1,6 +1,6 @@
 # Augen
 
-** WARNING: This gem is currently under heavy development, and therefore doesn't really do much yet (if anything). Once 1.0 it's ready, this line in the README will be removed ** 
+** WARNING: This gem is currently under heavy development, and therefore doesn't really do much yet (if anything). Once 1.0 it's ready, this line in the README will be removed **
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -19,7 +19,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+- To build a Augen::Task, you need to give it:
+  - A type (Enum of AST or AAT)
+  - Two or more Augen::TaskPoint instances (each is composed of a Augen::Turnpoint(line in a CUP file, check Google Drive), a turnpoint type, and radius)
+  - If AAT, minimum time (start open time, close time, max speed, max height, etc will come later)
+
+TODO: Add command line details to how to give these details, via a single CLI command (possibly too hard now), or "highline" style command and response (multiple line inputs)
+
+Augen will calculate the nominal, minimum and maximum distance of the task.
+
+Then, tell Augen which scoring ruleset to use to calculate the scoring (similar to the "SeeYou" scripts), Augen shall include some sane default (maybe use official FAI scoring rules by default?)
+
+Finally, tell Augen to choose a task, and feed it one or more IGC files. Augen will spit a human (or machine, command separated?) readable output with each Pilot details, total distance, total time, and scoring.
+
 
 ## Development
 
