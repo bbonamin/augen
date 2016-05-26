@@ -17,3 +17,7 @@ guard :rubocop, cmd: 'bundle exec rubocop' do
   watch(/.+\.rb$/)
   watch(%r{(?:.+/)?\.rubocop\.yml$}) { |m| File.dirname(m[0]) }
 end
+
+notification :terminal_notifier,
+             app_name: 'Augen',
+             activate: 'com.googlecode.iTerm2' if `uname` =~ /Darwin/
