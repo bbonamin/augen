@@ -26,7 +26,7 @@ Or install it yourself as:
 
 TODO: Add command line details to how to give these details, via a single CLI command (possibly too hard now), or "highline" style command and response (multiple line inputs)
 
-Augen will calculate the nominal, minimum and maximum distance of the task.
+For AAT tasks, Augen will calculate the nominal, minimum and maximum distance of the task. For AST, only the nominal
 
 Then, tell Augen which scoring ruleset to use to calculate the scoring (similar to the "SeeYou" scripts), Augen shall include some sane default (maybe use official FAI scoring rules by default?)
 
@@ -41,8 +41,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/augen. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/bbonamin/augen.
 
 ## License
 
