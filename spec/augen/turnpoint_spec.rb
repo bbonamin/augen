@@ -58,19 +58,9 @@ RSpec.describe Augen::Turnpoint do
   describe '#category' do
     it 'only accepts valid values as category' do
       %i(
-        fai_start_quadrant
         start_line
-        start_cylinder
-        bga_start_sector
-        fai_quadrant
-        keyhole_sector
-        bga_fixed_course_sector
-        bga_enhanced_option_fixed_course_sector
         turn_point_cylinder
-        fai_finish_quadrant
-        finish_line
         finish_cylinder
-        symmetric_quadrant
       ).each do |category|
         expect do
           described_class.new(
