@@ -29,4 +29,16 @@ RSpec.describe Augen::Waypoint do
     expect(waypoint.longitude).to eq('06047.117W')
     expect(waypoint.elevation).to eq('0.0m')
   end
+
+  describe '#latitude_dd' do
+    it 'returns its latitude in decimal degrees' do
+      expect(subject.latitude_dd).to eq(-32.9025)
+    end
+  end
+
+  describe '#longitude_dd' do
+    it 'returns its longitude in decimal degrees' do
+      expect(subject.longitude_dd).to eq(-60.785283)
+    end
+  end
 end
