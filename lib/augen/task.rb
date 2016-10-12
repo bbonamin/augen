@@ -17,9 +17,20 @@ module Augen
     end
 
     def nominal_distance
-      start = [turnpoints.first.latitude_dd, turnpoints.first.longitude_dd]
-      finish = [turnpoints.last.latitude_dd, turnpoints.last.longitude_dd]
-      Haversine.distance(start, finish).to_meters
+      turnpoints.each_with_index.inject(0) do |distance, (tp, index)|
+        next_tp = turnpoints[index + 1]
+        break distance if next_tp.nil?
+        distance + distance_between(tp, next_tp)
+      end - turnpoints.last.length # follow XCSoar convention
+    end
+
+    private
+
+    def distance_between(tp, other)
+      Haversine.distance(
+        [tp.latitude_dd, tp.longitude_dd],
+        [other.latitude_dd, other.longitude_dd]
+      ).to_meters
     end
   end
 end
