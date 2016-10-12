@@ -17,6 +17,9 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+require 'pry'
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -36,8 +39,6 @@ RSpec.configure do |config|
   # file, and it's useful to allow more verbose output when running an
   # individual spec file.
   config.default_formatter = 'doc' if config.files_to_run.one?
-
-  config.profile_examples = 10
 
   config.order = :random
   Kernel.srand config.seed
