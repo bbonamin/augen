@@ -21,9 +21,9 @@ RSpec.describe Augen::Task do
   end
   let(:turnpoint_2) do
     Augen::Turnpoint.new(
-      type: :start,
-      category: :start_line,
-      length: 10_000,
+      type: :finish,
+      category: :finish_cylinder,
+      length: 1_000,
       waypoint: Augen::Waypoint.new(
         name: 'Arrecifes',
         country: 'AR',
@@ -56,8 +56,11 @@ RSpec.describe Augen::Task do
   end
 
   describe 'calculated attributes' do
+    it 'has a nominal distance' do
+      # within 1km
+      expect(subject.nominal_distance).to be_within(1_000).of(143_000)
+    end
     it 'has a minimum distance'
-    it 'has a nominal distance'
     it 'has a maximum distance'
   end
 end

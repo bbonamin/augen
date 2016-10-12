@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Augen
   class Turnpoint
+    extend Forwardable
+    def_delegators :waypoint, :latitude_dd, :longitude_dd
     attr_reader :type, :category, :length, :waypoint
     VALID_TYPES = %i(start turnpoint finish).freeze
     VALID_CATEGORIES = %i(
