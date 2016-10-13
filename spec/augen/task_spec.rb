@@ -9,9 +9,22 @@ RSpec.describe Augen::Task do
   subject do
     described_class.new(
       type: 'AST',
-      minimum_time: 120, # minutes
       turnpoints: turnpoints
     )
+  end
+
+  it 'accepts AAT as a type' do
+    expect { described_class.new(type: 'AAT', minimum_time: 1, turnpoints: []) }.not_to raise_error
+  end
+
+  it 'accepts AST as a type' do
+    expect { described_class.new(type: 'AST', turnpoints: []) }.not_to raise_error
+  end
+
+  it 'does not accept random strings as a type' do
+    expect do
+      described_class.new(type: 'foobar', turnpoints: [])
+    end.to raise_error(ArgumentError, 'invalid task type')
   end
 
   it 'responds to type' do

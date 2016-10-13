@@ -3,17 +3,19 @@ require 'haversine'
 
 module Augen
   class Task
+    VALID_TYPES = %w(AAT AST).freeze
     attr_reader :type, :turnpoints, :minimum_time
+
     def initialize(opts = {})
-      @type = opts.fetch(:type) { raise ArgumentError, 'type is needed' }
+      type = opts[:type] || raise(ArgumentError, 'type is needed')
+      raise(ArgumentError, 'invalid task type') unless VALID_TYPES.include?(type)
+      @type = type
 
-      @minimum_time = opts.fetch(:minimum_time) do
-        raise ArgumentError, 'minimum_time is needed'
+      if @type == 'AAT'
+        @minimum_time = opts[:minimum_time] || raise(ArgumentError, 'minimum_time is needed for AAT tasks')
       end
 
-      @turnpoints = opts.fetch(:turnpoints) do
-        raise ArgumentError, 'turnpoints is needed'
-      end
+      @turnpoints = opts[:turnpoints] || raise(ArgumentError, 'turnpoints is needed')
     end
 
     def nominal_distance
