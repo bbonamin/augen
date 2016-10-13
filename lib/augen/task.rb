@@ -24,6 +24,14 @@ module Augen
       end - turnpoints.last.length # follow XCSoar convention
     end
 
+    def minimum_distance
+      return nominal_distance if @type == 'AST'
+    end
+
+    def maximum_distance
+      return nominal_distance if @type == 'AST'
+    end
+
     private
 
     def distance_between(tp, other)
