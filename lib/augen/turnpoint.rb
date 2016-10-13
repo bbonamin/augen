@@ -8,6 +8,7 @@ module Augen
     VALID_CATEGORIES = %i(
       start_line
       turn_point_cylinder
+      area_cylinder
       finish_cylinder
     ).freeze
 

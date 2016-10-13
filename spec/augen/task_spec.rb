@@ -126,5 +126,99 @@ RSpec.describe Augen::Task do
       end
     end
   end
-  describe 'AAT tasks'
+  describe 'AAT tasks' do
+    let(:start) do
+      Augen::Turnpoint.new(
+        type: :start,
+        category: :start_line,
+        length: 10_000,
+        waypoint: Augen::Waypoint.new(
+          name: 'Partida - 2',
+          country: 'AR',
+          latitude: '3305.200S',
+          longitude: '06037.400W',
+          elevation: '23.8m'
+        )
+      )
+    end
+
+    let(:area_1) do
+      Augen::Turnpoint.new(
+        type: :turnpoint,
+        category: :area_cylinder,
+        length: 15_000,
+        waypoint: Augen::Waypoint.new(
+          name: 'Cnel Bogado',
+          country: 'AR',
+          latitude: '3319.017S',
+          longitude: '06036.117W',
+          elevation: '0.0m'
+        )
+      )
+    end
+
+    let(:area_2) do
+      Augen::Turnpoint.new(
+        type: :turnpoint,
+        category: :area_cylinder,
+        length: 500,
+        waypoint: Augen::Waypoint.new(
+          name: 'Bombal',
+          country: 'AR',
+          latitude: '3327.500S',
+          longitude: '06119.200W',
+          elevation: '0.0m'
+        )
+      )
+    end
+
+    let(:finish) do
+      Augen::Turnpoint.new(
+        type: :finish,
+        category: :finish_cylinder,
+        length: 3_000,
+        waypoint: Augen::Waypoint.new(
+          name: 'Llegada 19',
+          country: 'AR',
+          latitude: '3302.483S',
+          longitude: '06035.783W',
+          elevation: '23.8m'
+        )
+      )
+    end
+
+    subject do
+      described_class.new(
+        type: 'AAT',
+        minimum_time: 120, # minutes
+        turnpoints: [start, area_1, area_2, finish]
+      )
+    end
+
+    it 'requires a minimum_time' do
+      expect do
+        described_class.new(
+          type: 'AAT',
+          minimum_time: nil,
+          turnpoints: [start, area_1, area_2, finish]
+        )
+      end.to raise_error(ArgumentError, 'minimum_time is needed for AAT tasks')
+    end
+
+    describe 'calculated attributes' do
+      it 'has a calculated nominal distance' do
+        expect(subject.nominal_distance).to be_within(1_000).of(173_000) # within 1km
+      end
+
+      it 'has a calculated minimum distance' do
+        pending 'Not implemented yet'
+        expect(subject.minimum_distance).to be_within(1_000).of(117_000) # within 1km
+      end
+
+      it 'has a calculated maximum distance' do
+        pending 'Not implemented yet'
+        expect(subject.maximum_distance).to be_within(1_000).of(236_000) # within 1km
+      end
+    end
+  end
 end
