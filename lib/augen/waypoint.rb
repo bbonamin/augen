@@ -29,6 +29,10 @@ module Augen
                                     ).truncate(6)
     end
 
+    def latitude_rad
+      (latitude_dd / 180) * Math::PI
+    end
+
     # Waypoints by default follow the Degree Decimal Minute format, just as the
     # SeeYou CUP file format.
     #
@@ -40,6 +44,10 @@ module Augen
       decimal_minutes = bits[3..8].join.to_d
       hemisphere_to_sign(bits[9]) * (degrees + (decimal_minutes / 60)
                                     ).truncate(6)
+    end
+
+    def longitude_rad
+      (longitude_dd * Math::PI) / 180
     end
 
     private
