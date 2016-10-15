@@ -86,4 +86,58 @@ RSpec.describe Augen::Turnpoint do
       end
     end
   end
+  describe '#bearing_to' do
+    let(:target_1) do
+      described_class.new(
+        type: :start,
+        category: :start_line,
+        length: 10_000,
+        waypoint: Augen::Waypoint.new(
+          name: 'Partida - 2',
+          country: 'AR',
+          latitude: '3305.200S',
+          longitude: '06037.400W',
+          elevation: '23.8m'
+        )
+      )
+    end
+
+    let(:target_2) do
+      described_class.new(
+        type: :turnpoint,
+        category: :area_cylinder,
+        length: 500,
+        waypoint: Augen::Waypoint.new(
+          name: 'Bombal',
+          country: 'AR',
+          latitude: '3327.500S',
+          longitude: '06119.200W',
+          elevation: '0.0m'
+        )
+      )
+    end
+
+    subject do
+      described_class.new(
+        type: :turnpoint,
+        category: :area_cylinder,
+        length: 15_000,
+        waypoint: Augen::Waypoint.new(
+          name: 'Cnel Bogado',
+          country: 'AR',
+          latitude: '3319.017S',
+          longitude: '06036.117W',
+          elevation: '0.0m'
+        )
+      )
+    end
+
+    it 'returns about 355 degrees bearing to `target_1`' do
+      expect(subject.bearing_to(target_1)).to be_within(0.00001).of(355.55141)
+    end
+
+    it 'returns about 256 degrees bearing to `target_2`' do
+      expect(subject.bearing_to(target_2)).to be_within(0.00001).of(256.53374)
+    end
+  end
 end
