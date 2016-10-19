@@ -140,4 +140,21 @@ RSpec.describe Augen::Turnpoint do
       expect(subject.bearing_to(target_2)).to be_within(0.00001).of(256.53374)
     end
   end
+  describe '#bearing_average' do
+    it 'returns the clockwise average for angles that are completely opposite' do
+      expect(subject.bearing_average(0, 180)).to eq(90)
+      expect(subject.bearing_average(180, 0)).to eq(270)
+    end
+
+    it 'returns the closest average for any other pairs of angles' do
+      expect(subject.bearing_average(180, 1)).to eq(90.5)
+      expect(subject.bearing_average(1, 180)).to eq(90.5)
+      expect(subject.bearing_average(20, 350)).to eq(5)
+      expect(subject.bearing_average(350, 20)).to eq(5)
+      expect(subject.bearing_average(10, 20)).to eq(15)
+      expect(subject.bearing_average(350, 2)).to eq(356)
+      expect(subject.bearing_average(359, 0)).to eq(359.5)
+      expect(subject.bearing_average(180, 180)).to eq(180)
+    end
+  end
 end

@@ -38,6 +38,14 @@ module Augen
       (degrees + 360) % 360
     end
 
+    # Returns the average of a pair of bearings.
+    #
+    # Taken from http://stackoverflow.com/a/1159336
+    def bearing_average(bearing1, bearing2)
+      diff = ((bearing1.to_d - bearing2.to_d + 180 + 360) % 360) - 180
+      (360 + bearing2 + (diff / 2)) % 360
+    end
+
     private
 
     def init_type(type)
