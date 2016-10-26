@@ -13,6 +13,7 @@ module Augen
       finish_cylinder
     ).freeze
 
+    EARTH_RADIUS_IN_METERS = 6_371_000
     def initialize(opts = {})
       init_type opts[:type]
       init_category opts[:category]
@@ -46,6 +47,35 @@ module Augen
       (360 + bearing2 + (diff / 2)) % 360
     end
 
+    # Given a bearing and a distance, return a new set of coordinates.
+    #
+    # Taken from http://stackoverflow.com/questions/12094484/rails-ruby-calculate-new-coordinates-using-given-distance-and-bearing-from-a-sta
+    #
+    # Returns a [latitude, longitude] pair in decimal degrees.
+    def travel(bearing:, distance:)
+      bearing_rad = (bearing.to_d / 180) * Math::PI
+      angular_distance = distance.to_d / EARTH_RADIUS_IN_METERS.to_d
+
+      lat2 = travel_latitude_rad(angular_distance, bearing_rad)
+      lon2 = travel_longitude_rad(angular_distance, bearing_rad, lat2)
+
+      [(lat2 * 180 / Math::PI), (lon2 * 180 / Math::PI)]
+    end
+
+    def closest_in_area(before, after)
+      # find bearing between self and before
+      bearing_before = bearing_to(before)
+      #
+      # # find bearing between self and after
+      bearing_after = bearing_to(after)
+
+      # calculate middle angle between both
+      average_bearing = bearing_average(bearing_before, bearing_after)
+
+      # travel length in that bearing
+      travel(bearing: average_bearing, distance: length)
+    end
+
     private
 
     def init_type(type)
@@ -72,6 +102,20 @@ module Augen
     def bearing_y(to)
       Math.cos(latitude_rad) * Math.sin(to.latitude_rad) - \
         Math.sin(latitude_rad) * Math.cos(to.latitude_rad) * Math.cos(bearing_longitude_delta(to))
+    end
+
+    def travel_latitude_rad(angular_distance, bearing_rad)
+      Math.asin(
+        Math.sin(latitude_rad) * Math.cos(angular_distance) +
+        Math.cos(latitude_rad) * Math.sin(angular_distance) * Math.cos(bearing_rad)
+      )
+    end
+
+    def travel_longitude_rad(angular_distance, bearing_rad, latitude_rad)
+      longitude_rad + Math.atan2(
+        Math.sin(bearing_rad) * Math.sin(angular_distance) *
+        Math.cos(latitude_rad), Math.cos(angular_distance) - Math.sin(latitude_rad) * Math.sin(latitude_rad)
+      )
     end
   end
 end

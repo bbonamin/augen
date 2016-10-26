@@ -157,4 +157,83 @@ RSpec.describe Augen::Turnpoint do
       expect(subject.bearing_average(180, 180)).to eq(180)
     end
   end
+  describe '#travel' do
+    it 'returns a new set of coordinates of the distance travelling north' do
+      new_position = subject.travel(bearing: 360, distance: 10_000)
+      expect(new_position.first).to be_within(0.00001).of(-32.81256) # latitude
+      expect(new_position.last).to be_within(0.00001).of(-60.78528) # longitude
+    end
+
+    it 'returns a new set of coordinates of the distance travelling east' do
+      new_position = subject.travel(bearing: 90, distance: 10_000)
+      expect(new_position.first).to be_within(0.00001).of(-32.90245) # latitude
+      expect(new_position.last).to be_within(0.00001).of(-60.67816) # longitude
+    end
+
+    it 'returns a new set of coordinates of the distance travelling south' do
+      new_position = subject.travel(bearing: 180, distance: 10_000)
+      expect(new_position.first).to be_within(0.00001).of(-32.99243) # latitude
+      expect(new_position.last).to be_within(0.00001).of(-60.78528) # longitude
+    end
+
+    it 'returns a new set of coordinates of the distance travelling west' do
+      new_position = subject.travel(bearing: 270, distance: 10_000)
+      expect(new_position.first).to be_within(0.00001).of(-32.90245) # latitude
+      expect(new_position.last).to be_within(0.00001).of(-60.89239) # longitude
+    end
+  end
+  describe '#closest_in_area' do
+    context 'given a before turnpoint and after turnpoint' do
+      let(:before) do
+        described_class.new(
+          type: :start,
+          category: :start_line,
+          length: 10_000,
+          waypoint: Augen::Waypoint.new(
+            name: 'Partida - 2',
+            country: 'AR',
+            latitude: '3305.200S',
+            longitude: '06037.400W',
+            elevation: '23.8m'
+          )
+        )
+      end
+
+      let(:after) do
+        described_class.new(
+          type: :turnpoint,
+          category: :area_cylinder,
+          length: 500,
+          waypoint: Augen::Waypoint.new(
+            name: 'Bombal',
+            country: 'AR',
+            latitude: '3327.500S',
+            longitude: '06119.200W',
+            elevation: '0.0m'
+          )
+        )
+      end
+
+      subject do
+        described_class.new(
+          type: :turnpoint,
+          category: :area_cylinder,
+          length: 15_000,
+          waypoint: Augen::Waypoint.new(
+            name: 'Cnel Bogado',
+            country: 'AR',
+            latitude: '3319.017S',
+            longitude: '06036.117W',
+            elevation: '0.0m'
+          )
+        )
+      end
+
+      it 'returns the closest coordinates inside its area' do
+        new_position = subject.closest_in_area(before, after)
+        expect(new_position.first).to be_within(0.00001).of(-33.23750)
+        expect(new_position.last).to be_within(0.00001).of(-60.73236)
+      end
+    end
+  end
 end
